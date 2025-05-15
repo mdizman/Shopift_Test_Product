@@ -13,8 +13,11 @@ class BottomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Container(
-      height: 100,
+      height: screenHeight *0.12,
       color: AppConstants.primaryColor,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -27,8 +30,8 @@ class BottomBar extends StatelessWidget {
             ),
             const SizedBox(width: 12),
             SizedBox(
-              width: 180,
-              height: 50,
+              width: screenWidth *0.4,
+              height: screenHeight *0.06,
               child: ElevatedButton(
                 onPressed: onAddToCart,
                 style: ElevatedButton.styleFrom(

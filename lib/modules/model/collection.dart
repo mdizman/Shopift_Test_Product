@@ -1,4 +1,4 @@
-class CollectionModel {
+class CollectionModel {                       //Ürün bilgileri içerisinde ürünün collection bilgileri modeli 
   final String? id;
   final String? title;
   final String? handle;

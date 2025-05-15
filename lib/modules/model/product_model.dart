@@ -1,6 +1,6 @@
 import 'package:hollypalm_case_app/modules/model/collection.dart';
 
-class ProductModel {
+class ProductModel {                  //Product modeli, Postmande attığım isteğe göre gerekli olabilecek alanlar çekildi
   final String? id;
   final String? title;
   final String? handle;
@@ -61,7 +61,7 @@ class ProductModel {
     final imagesJson = json['images']?['nodes'] as List<dynamic>? ?? [];
     final collectionsJson = json['collections']?['edges'] as List<dynamic>? ?? [];
 
-    return ProductModel(
+    return ProductModel(                      
       id: json['id'],
       title: json['title'],
       handle: json['handle'],

@@ -1,16 +1,29 @@
 # hollypalm_case_app
+Holly Palm Case App
 
-A new Flutter project.
+Mehmet Dizman
 
-## Getting Started
+## Version içeriği
+Flutter 3.29.3 
+Tools • Dart 3.7.2 • DevTools 2.42.3
 
-This project is a starting point for a Flutter application.
+## Derleme hatası çözümü
+Proje derleme hatası almanız durumunda 
+-- android dosyası içerisinden settings.gradle a giriş yap
+--plugins id "com.android.application" version "8.x.x" apply false kendi sürümüne göre ayarla
 
-A few resources to get you started if this is your first Flutter project:
+## Apikey gizliliği
+.env dosyası içerisinde APIKEY, STORE_LINK, PRODUCT_ID bulnmakta
+proje kök dizinine .env dosyası oluştur. 
+içeriğine 
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+APIKEY='00e75e3bfd60f9cbb0d4f357c372d2b0'
+STORE_LINK='https://hollypalm-test.myshopify.com/api/2025-04/graphql.json'
+PRODUCT_ID="gid://shopify/Product/8740231905517"
+APPJSON='application/json'
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+bu dosyaları içeriğine yapıştır. 
+
+Yapılmaması halinde veri çekme işlemi yapılamayacaktır.
+
+## Dosya aktarımında key alanlarının paylaşılmasını engellemek amacıyla env kullanıldı

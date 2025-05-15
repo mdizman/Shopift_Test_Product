@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_carousel_slider/carousel_slider.dart';
-import 'package:flutter_carousel_slider/carousel_slider_indicators.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hollypalm_case_app/core/constants/constants.dart';
 import 'package:hollypalm_case_app/shared/accordion.dart';
 import 'package:hollypalm_case_app/shared/custom_snacbar.dart';
 import 'package:hollypalm_case_app/shared/detail.dart';
 import 'package:hollypalm_case_app/shared/favorite_button.dart';
+import 'package:hollypalm_case_app/shared/header.dart';
 import 'package:hollypalm_case_app/shared/select_image.dart';
 import '../../../core/utils/html_parser.dart';
 import '../../shared/bottom_bar.dart';
@@ -17,7 +16,9 @@ class ProductDetailView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final productAsync = ref.watch(productProvider);
+    final productAsync = ref.watch(productProvider);                                         // State management Riverpod kullanımı 
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -25,49 +26,11 @@ class ProductDetailView extends ConsumerWidget {
         data: (product) {
           return CustomScrollView(
             slivers: [
-              SliverAppBar(
-                pinned: true,
-                expandedHeight: 300,
-                backgroundColor: AppConstants.whiteColor,
-                flexibleSpace: LayoutBuilder(
-                  builder: (BuildContext context, BoxConstraints constraints) {
-                    final double percentage = (constraints.maxHeight - kToolbarHeight) / (300 - kToolbarHeight);
-                    final double clampedOpacity = percentage.clamp(0.0, 1.0);
-
-                    return Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        Opacity(
-                          opacity: clampedOpacity,
-                          child: CarouselSlider.builder(
-                            itemCount: product.imageUrls.length,
-                            slideBuilder: (index) {
-                              return Image.network(
-                                product.imageUrls[index],
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                              );
-                            },
-                            slideTransform: const CubeTransform(),
-                            enableAutoSlider: false,
-                            unlimitedMode: true,
-                            initialPage: 0,
-                            slideIndicator: CircularSlideIndicator(
-                              padding: const EdgeInsets.all(32),
-                              indicatorBorderColor: AppConstants.whiteBorderColor,
-                              indicatorBorderWidth: 1,
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              ),
-              // İçerik bölümü
+              ProductHeader(screenHeight: screenHeight, product: product,),     //Ürün resimlerinin slider penceresi
               SliverToBoxAdapter(
                 child: Container(
                   color: AppConstants.textColor,
+                  width: screenWidth,
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: Column(
@@ -80,22 +43,19 @@ class ProductDetailView extends ConsumerWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(height: 5),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Expanded(
                               child: Text(
-                                product.title ?? "",
+                                product.title ?? "",                                 //Ürün Bilgileri
                                 style: const TextStyle(fontSize: 22),
                               ),
                             ),
                             const FavoriteButton(),
-                            
                           ],
                         ),
-                        const SizedBox(height: 15),
-                        SelectImageWidget(product: product,),
+                        SelectImageWidget(product: product),
                         const SizedBox(height: 25),
                         const DetailWidget(icon: Icons.local_shipping_outlined, data: "22-25 Ağustos Kargoda"),
                         const SizedBox(height: 10),
@@ -104,12 +64,12 @@ class ProductDetailView extends ConsumerWidget {
                         const Divider(thickness: 1, height: 0.5),
                         CustomAccordion(
                           title: "Ürün Bilgileri",
-                          child: HtmlParser.render(product.descriptionHtml ?? ""),
+                          child: HtmlParser.render(product.descriptionHtml ?? ""),     // Ürün açıklaması Html PArser edildiği kısım 
                         ),
                         const Divider(thickness: 1, height: 1),
                         const CustomAccordion(
                           title: "Taksit Seçenekleri",
-                          child:  Text("Bu ürün için Taksit seçeneği bulunmamakta."),
+                          child: Text("Bu ürün için Taksit seçeneği bulunmamakta."),
                         ),
                         const Divider(thickness: 1, height: 1),
                         const CustomAccordion(
@@ -117,12 +77,12 @@ class ProductDetailView extends ConsumerWidget {
                           child: Text("Bu ürün için İade, iptal ve teslimat koşulu bulunmamakta."),
                         ),
                         const Divider(thickness: 1, height: 1),
-                        const CustomAccordion(
+                        const CustomAccordion(                                         // Ürün bilgilerinin akordiyon olarak açılıp kapatıldığı widget
                           title: "Paylaş",
-                          child:  Text("Paylaş için bir seçenek bulunmamakta."),
+                          child: Text("Paylaş için bir seçenek bulunmamakta."),
                         ),
                         const Divider(thickness: 1, height: 0.5),
-                        const SizedBox(height: 80),
+                        // SizedBox(height: screenHeight * 0.1),
                       ],
                     ),
                   ),
@@ -134,11 +94,11 @@ class ProductDetailView extends ConsumerWidget {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (err, stack) => Center(child: Text("Hata: $err")),
       ),
-      bottomNavigationBar: productAsync.when(
+      bottomNavigationBar: productAsync.when(       //Floating scroll
         data: (product) => BottomBar(
           priceText: "${product.maxVariantPriceAmount ?? ""} ${product.currencyCode ?? ""}",
           onAddToCart: () {
-            showCustomSnackbar(context, "Sepetinize başarıyla eklendi");
+            showCustomSnackbar(context, "Sepetinize başarıyla eklendi");                                // Sepete eklenildiğinde açılan snackbar bilgilendirme kutusu
           },
         ),
         loading: () => const SizedBox.shrink(),

@@ -6,7 +6,7 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 
 class ProductService {
 
-  static Future<ProductModel> fetchProducts() async {
+  static Future<ProductModel> fetchProducts() async {                    //Shopift query
     const String query = r'''
   query GetProduct($id: ID!) {
     product(id: $id) {
@@ -76,7 +76,6 @@ class ProductService {
   }
 
   final json = result.data?['product'];
-  print(json);
   return ProductModel.fromJson(json);
   }
 }

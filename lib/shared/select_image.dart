@@ -10,13 +10,16 @@ class SelectImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Align(
       alignment: Alignment.centerLeft,
       child: Column(
         children: [
           Container(
-            width: 100,
-            height: 100,
+            width: screenWidth *0.2,
+            height: screenHeight *0.1,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
               image: DecorationImage(
@@ -28,7 +31,7 @@ class SelectImageWidget extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             product.imageName.first,
-            style: const TextStyle(fontSize: 11),
+            style: const TextStyle(fontSize: 13),
           ),
         ],
       ),
